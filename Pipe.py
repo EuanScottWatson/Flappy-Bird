@@ -18,3 +18,4 @@ class Pipe:
             self.pipeTop = self.pipeTop.move(1050, 0)
             self.pipeBottom = self.pipeBottom.move(1050, 0)
             self.point = np.array([1050, self.bottom])
+

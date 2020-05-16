@@ -8,6 +8,7 @@ class Game:
     def __init__(self):
         self.bird = Bird()
         self.pipes = [Pipe(800), Pipe(1050), Pipe(1300), Pipe(1550)]
+        self.bestFitness = 0
 
     def display(self, screen):
         pygame.draw.circle(screen, (255, 255, 255), self.bird.pos, self.bird.radius, 1)
@@ -35,9 +36,14 @@ class Game:
 
     def run_logic(self):
         self.bird.update()
-        self.bird.checkCollision(self.pipes)
         for pipe in self.pipes:
             pipe.update()
+
+        if self.bird.checkCollision(self.pipes):
+            self.bestFitness = max(self.bestFitness, self.bird.fitness)
+            self.bird = Bird()
+            self.pipes = [Pipe(800), Pipe(1050), Pipe(1300), Pipe(1550)]
+            print(self.bestFitness)
 
 
 def main():
