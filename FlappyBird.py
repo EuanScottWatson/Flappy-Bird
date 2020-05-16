@@ -10,7 +10,7 @@ class Game:
         self.pipes = [Pipe(800), Pipe(1050), Pipe(1300), Pipe(1550)]
 
     def display(self, screen):
-        pygame.draw.circle(screen, (255, 255, 255), self.bird.pos, 20, 1)
+        pygame.draw.circle(screen, (255, 255, 255), self.bird.pos, self.bird.radius, 1)
         for pipe in self.pipes:
             pygame.draw.rect(screen, (255, 255, 255), pipe.pipeTop, 0)
             pygame.draw.rect(screen, (255, 255, 255), pipe.pipeBottom, 0)
@@ -35,6 +35,7 @@ class Game:
 
     def run_logic(self):
         self.bird.update()
+        self.bird.checkCollision(self.pipes)
         for pipe in self.pipes:
             pipe.update()
 
