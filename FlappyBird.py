@@ -1,14 +1,19 @@
-import pygame, os
+import os
 from pygame.locals import *
 from Bird import *
+from Pipe import *
 
 
 class Game:
     def __init__(self):
         self.bird = Bird()
+        self.pipes = [Pipe(800), Pipe(1050), Pipe(1300), Pipe(1550)]
 
     def display(self, screen):
         pygame.draw.circle(screen, (255, 255, 255), self.bird.pos, 20, 1)
+        for pipe in self.pipes:
+            pygame.draw.rect(screen, (255, 255, 255), pipe.pipeTop, 0)
+            pygame.draw.rect(screen, (255, 255, 255), pipe.pipeBottom, 0)
 
     def events(self):
         for event in pygame.event.get():
@@ -30,6 +35,8 @@ class Game:
 
     def run_logic(self):
         self.bird.update()
+        for pipe in self.pipes:
+            pipe.update()
 
 
 def main():
@@ -39,7 +46,7 @@ def main():
 
     os.environ['SDL_VIDEO_CENTERED'] = "True"
 
-    width, height = 600, 900
+    width, height = 800, 900
 
     screen = pygame.display.set_mode((width, height))
 
