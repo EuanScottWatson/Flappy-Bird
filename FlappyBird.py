@@ -11,10 +11,13 @@ class Game:
         self.bestFitness = 0
 
     def display(self, screen):
-        pygame.draw.circle(screen, (255, 255, 255), self.bird.pos, self.bird.radius, 1)
         for pipe in self.pipes:
             pygame.draw.rect(screen, (255, 255, 255), pipe.pipeTop, 0)
             pygame.draw.rect(screen, (255, 255, 255), pipe.pipeBottom, 0)
+        if not self.bird.dead:
+            pygame.draw.circle(screen, (255, 255, 255), self.bird.pos, self.bird.radius, 1)
+        else:
+            pygame.draw.circle(screen, (255, 0, 0), self.bird.pos, self.bird.radius, 1)
 
     def events(self):
         for event in pygame.event.get():
@@ -36,14 +39,20 @@ class Game:
 
     def run_logic(self):
         self.bird.update()
-        for pipe in self.pipes:
-            pipe.update()
 
-        if self.bird.checkCollision(self.pipes):
-            self.bestFitness = max(self.bestFitness, self.bird.fitness)
-            self.bird = Bird()
-            self.pipes = [Pipe(800), Pipe(1050), Pipe(1300), Pipe(1550)]
-            print(self.bestFitness)
+        if not self.bird.dead:
+            for pipe in self.pipes:
+                pipe.update()
+            self.bird.checkCollision(self.pipes)
+
+        if self.bird.died:
+            self.reset()
+
+    def reset(self):
+        self.bestFitness = max(self.bestFitness, self.bird.fitness)
+        self.bird = Bird()
+        self.pipes = [Pipe(800), Pipe(1050), Pipe(1300), Pipe(1550)]
+        print(self.bestFitness)
 
 
 def main():
