@@ -1,6 +1,6 @@
-from Genome import *
-from Species import *
-from GenomeFitnessPair import *
+from NEATt.Genome import *
+from NEATt.Species import *
+from NEATt.GenomeFitnessPair import *
 
 
 def getRandomGenome(species):
@@ -52,8 +52,8 @@ class Evaluator:
         for g in self.population:
             foundSpecies = False
             for s in self.species:
-                if Genome.compatibilityDistance(g, s.leader, self.config.C1, self.config.C2,
-                                                self.config.C3) < self.config.DISTANCE_THRESHOLD:
+                if compatibilityDistance(g, s.leader, self.config.C1, self.config.C2,
+                                         self.config.C3) < self.config.DISTANCE_THRESHOLD:
                     s.population.append(g)
                     self.speciesMap[g] = s
                     foundSpecies = True

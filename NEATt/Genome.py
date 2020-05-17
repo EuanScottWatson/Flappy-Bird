@@ -1,8 +1,8 @@
 import random
-from CONFIG import *
-from NodeType import *
-from ConnectionGenome import *
-from NodeGenome import *
+from NEATt.CONFIG import *
+from NEATt.NodeType import *
+from NEATt.ConnectionGenome import *
+from NEATt.NodeGenome import *
 
 
 def crossover(parent1, parent2):
@@ -83,6 +83,13 @@ def countExcessDisjoint(genome1, genome2):
     return [excessGenes, disjointGenes]
 
 
+def compatibilityDistance(genome1, genome2, c1, c2, c3):
+    excessDisjoint = countExcessDisjoint(genome1, genome2)
+    avWeightDifference = getAverageWeightDifference(genome1, genome2)
+
+    return c1 * excessDisjoint[0] + c2 * excessDisjoint[1] + c3 * avWeightDifference
+
+
 class Genome:
     def __init__(self, starter=None):
         self.nodes = {}
@@ -149,9 +156,3 @@ class Genome:
         self.nodes[newNode.id] = newNode
         self.connections[connection1.innovationNo] = connection1
         self.connections[connection2.innovationNo] = connection2
-
-    def compatibilityDistance(self, genome1, genome2, c1, c2, c3):
-        excessDisjoint = countExcessDisjoint(genome1, genome2)
-        avWeigtDifference = getAverageWeightDifference(genome1, genome2)
-
-        return c1 * excessDisjoint[0] + c2 * excessDisjoint[1] + c3 * avWeigtDifference

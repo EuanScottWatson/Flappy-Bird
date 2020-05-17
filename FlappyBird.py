@@ -2,6 +2,7 @@ import os
 from pygame.locals import *
 from Bird import *
 from Pipe import *
+from NEATt import *
 
 
 class Game:
@@ -9,6 +10,31 @@ class Game:
         self.bird = Bird()
         self.pipes = [Pipe(800), Pipe(1050), Pipe(1300), Pipe(1550)]
         self.bestFitness = 0
+
+        self.genome = Genome()
+        self.nodeInnovationNo = InnovationNumber()
+        self.connectionInnovationNo = InnovationNumber()
+        self.initGenome()
+
+        self.evaluator = Evaluator(10, self.genome, self.nodeInnovationNo, self.connectionInnovationNo)
+
+    def initGenome(self):
+        n1 = NodeGenome(self.nodeInnovationNo.getInnovationNo(), NodeType.INPUT)
+        n2 = NodeGenome(self.nodeInnovationNo.getInnovationNo(), NodeType.INPUT)
+        n3 = NodeGenome(self.nodeInnovationNo.getInnovationNo(), NodeType.INPUT)
+        n4 = NodeGenome(self.nodeInnovationNo.getInnovationNo(), NodeType.INPUT)
+
+        self.genome.addNode(n1)
+        self.genome.addNode(n2)
+        self.genome.addNode(n3)
+        self.genome.addNode(n4)
+
+        self.genome.addConnection(
+            ConnectionGenome(n1, n4, random.random() * 4 - 2, True, self.connectionInnovationNo.getInnovationNo()))
+        self.genome.addConnection(
+            ConnectionGenome(n2, n4, random.random() * 4 - 2, True, self.connectionInnovationNo.getInnovationNo()))
+        self.genome.addConnection(
+            ConnectionGenome(n3, n4, random.random() * 4 - 2, True, self.connectionInnovationNo.getInnovationNo()))
 
     def display(self, screen):
         for pipe in self.pipes:
@@ -37,8 +63,18 @@ class Game:
         pygame.display.update()
         pygame.display.flip()
 
+    def getLeftmostPipe(self):
+        pipeDict = dict((pipe.point[0], pipe) for pipe in self.pipes)
+        leftMost = min(pipeDict.items(), key=lambda x: x[0])[1]
+
+        if leftMost.passedBird:
+            leftMost = self.pipes[(self.pipes.index(leftMost) + 1) % 4]
+
+        return leftMost
+
     def run_logic(self):
         self.bird.update()
+        self.bird.update_sees(self.getLeftmostPipe())
 
         if not self.bird.dead:
             for pipe in self.pipes:
@@ -47,6 +83,8 @@ class Game:
 
         if self.bird.died:
             self.reset()
+
+        self.getLeftmostPipe()
 
     def reset(self):
         self.bestFitness = max(self.bestFitness, self.bird.fitness)

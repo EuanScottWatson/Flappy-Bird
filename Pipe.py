@@ -9,6 +9,8 @@ class Pipe:
         self.pipeTop = pygame.Rect(x, 0, 75, self.bottom)
         self.pipeBottom = pygame.Rect(x, self.bottom + 150, 75, 900)
 
+        self.passedBird = False
+
     def update(self):
         self.pipeTop = self.pipeTop.move(-5, 0)
         self.pipeBottom = self.pipeBottom.move(-5, 0)

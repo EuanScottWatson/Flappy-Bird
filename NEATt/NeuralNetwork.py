@@ -1,5 +1,5 @@
-from Neuron import *
-from NodeType import *
+from NEATt.Neuron import *
+from NEATt.NodeType import *
 
 
 class NeuralNetwork:

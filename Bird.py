@@ -12,6 +12,9 @@ class Bird:
         self.dead = False
         self.died = False
 
+        # Sees: [Y velocity, X distance to Pipe, Y change in pipe]
+        self.sees = []
+
     def jump(self):
         self.velocity[1] = max(min(25, self.velocity[1] - 16), -15)
 
@@ -26,10 +29,14 @@ class Bird:
                 self.died = True
             self.velocity[1] = max(min(30, self.velocity[1] + 8), -40)
 
+    def update_sees(self, leftMost):
+        self.sees = [self.velocity[1], leftMost.point[0] - self.pos[0], leftMost.point[1] - self.pos[1]]
+
     def checkPipePass(self, pipes):
         for pipe in pipes:
             if pipe.point[0] + 95 == self.pos[0]:
                 self.fitness += 5
+                pipe.passedBird = True
                 break
 
     def checkCollision(self, pipes):
@@ -66,3 +73,6 @@ class Bird:
 
         if self.dead:
             self.velocity = np.array([0, -40])
+
+    def makeDecision(self):
+        pass
