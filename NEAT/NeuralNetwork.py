@@ -10,6 +10,7 @@ class NeuralNetwork:
 
         self.neurons = {}
 
+
         for id in genome.nodes.keys():
             neuron = Neuron()
             n = genome.nodes[id]
@@ -25,8 +26,8 @@ class NeuralNetwork:
         for id in genome.connections.keys():
             c = genome.connections[id]
             if c.active:
-                inputNeuron = self.neurons[c.inputNode]
-                outputNeuron = self.neurons[c.outputNode]
+                inputNeuron = self.neurons[c.inputNode.id]
+                outputNeuron = self.neurons[c.outputNode.id]
 
                 inputNeuron.addOutput(c.outputNode, c.weight)
                 outputNeuron.addInput()
@@ -44,8 +45,8 @@ class NeuralNetwork:
             inputNeuron.calculateOutput()
 
             for j in range(len(inputNeuron.outputIDs)):
-                outputNueron = self.neurons[inputNeuron.outputIDs[j]]
-                outputNueron.addInputValue(inputNeuron.finalOutput * inputNeuron.outputWeights[j])
+                outputNeuron = self.neurons[inputNeuron.outputIDs[j].id]
+                outputNeuron.addInputValue(inputNeuron.finalOutput * inputNeuron.outputWeights[j])
 
             self.unprocessed.remove(inputNeuron)
 

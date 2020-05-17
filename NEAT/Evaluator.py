@@ -129,6 +129,7 @@ class Evaluator:
 
                 self.nextGeneration.append(child)
 
+        self.birds = [Bird() for _ in range(self.populationSize)]
         self.population = self.nextGeneration
 
     def evaluateGenome(self, index):

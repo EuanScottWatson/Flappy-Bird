@@ -26,8 +26,10 @@ def getAverageWeightDifference(g1, g2):
     matchingGenes = 0
     weightDifference = 0
 
-    connectionOneKeys = g1.connections.keys().sort()
-    connectionTwoKeys = g2.connections.keys().sort()
+    connectionOneKeys = list(g1.connections.keys())
+    connectionOneKeys.sort()
+    connectionTwoKeys = list(g2.connections.keys())
+    connectionTwoKeys.sort()
     highestInnovation = max(connectionOneKeys[-1], connectionTwoKeys[-1])
 
     for i in range(0, highestInnovation + 1):
@@ -60,8 +62,10 @@ def countExcessDisjoint(genome1, genome2):
     excessGenes = 0
     disjointGenes = 0
 
-    nodeOneKeys = genome1.nodes.keys().sort()
-    nodeTwoKeys = genome2.nodes.keys().sort()
+    nodeOneKeys = list(genome1.nodes.keys())
+    nodeOneKeys.sort()
+    nodeTwoKeys = list(genome2.nodes.keys())
+    nodeTwoKeys.sort()
     highestInnovation = max(nodeOneKeys[-1], nodeTwoKeys[-1])
 
     for i in range(0, highestInnovation + 1):
@@ -70,8 +74,10 @@ def countExcessDisjoint(genome1, genome2):
         disjointGenes = getDisjointExcessNodes(genome1, genome2, disjointGenes, i, nodeOneKeys[1] > i,
                                                nodeTwoKeys[-1] > i)
 
-    connectionOneKeys = genome1.connections.keys().sort()
-    connectionTwoKeys = genome2.connections.keys().sort()
+    connectionOneKeys = list(genome1.connections.keys())
+    connectionOneKeys.sort()
+    connectionTwoKeys = list(genome2.connections.keys())
+    connectionTwoKeys.sort()
     highestInnovation = max(connectionOneKeys[-1], connectionTwoKeys[-1])
 
     for i in range(0, highestInnovation + 1):
@@ -156,3 +162,13 @@ class Genome:
         self.nodes[newNode.id] = newNode
         self.connections[connection1.innovationNo] = connection1
         self.connections[connection2.innovationNo] = connection2
+
+    def print(self):
+        for n in self.nodes.values():
+            print(n.id)
+
+        for c in self.connections.values():
+            print("\nInnovation: ", c.innovationNo)
+            print("Conneciton: ", c.inputNode.id, "->", c.outputNode.id)
+            print("Enabled: ", c.active)
+            print("Weight: ", c.weight)

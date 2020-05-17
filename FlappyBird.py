@@ -2,7 +2,7 @@ import os
 from pygame.locals import *
 from Bird import *
 from Pipe import *
-from NEAT.Genome import *
+from NEAT.NeuralNetwork import *
 from NEAT.InnovationNumber import *
 from NEAT.Evaluator import *
 from NEAT.NodeGenome import *
@@ -24,10 +24,10 @@ class Game:
         self.evaluator = Evaluator(10, self.genome, self.nodeInnovationNo, self.connectionInnovationNo)
 
     def initGenome(self):
-        n1 = NodeGenome(self.nodeInnovationNo.getInnovationNo(), NodeType.INPUT)
-        n2 = NodeGenome(self.nodeInnovationNo.getInnovationNo(), NodeType.INPUT)
-        n3 = NodeGenome(self.nodeInnovationNo.getInnovationNo(), NodeType.INPUT)
-        n4 = NodeGenome(self.nodeInnovationNo.getInnovationNo(), NodeType.INPUT)
+        n1 = NodeGenome(NodeType.INPUT, self.nodeInnovationNo.getInnovationNo())
+        n2 = NodeGenome(NodeType.INPUT, self.nodeInnovationNo.getInnovationNo())
+        n3 = NodeGenome(NodeType.INPUT, self.nodeInnovationNo.getInnovationNo())
+        n4 = NodeGenome(NodeType.OUTPUT, self.nodeInnovationNo.getInnovationNo())
 
         self.genome.addNode(n1)
         self.genome.addNode(n2)
@@ -81,26 +81,27 @@ class Game:
     def run_logic(self):
         for pipe in self.pipes:
             pipe.update()
-        for bird in self.evaluator.birds:
+        for i in range(self.evaluator.populationSize):
+            bird = self.evaluator.birds[i]
             bird.update()
             bird.update_sees(self.getLeftmostPipe())
             bird.checkCollision(self.pipes)
 
-            if random.random() < 0.1:
+            neuralnetwork = NeuralNetwork(self.evaluator.population[i])
+            if neuralnetwork.feedForward(bird.sees)[0] > 0.5:
                 bird.jump()
 
         # Check if they're all dead
+        dead = True
+        for bird in self.evaluator.birds:
+            dead = dead and bird.dead
 
-        # if self.bird.died:
-        #     self.reset()
-
-        # self.getLeftmostPipe()
+        if dead:
+            self.evaluator.evaluate()
+            self.reset()
 
     def reset(self):
-        self.bestFitness = max(self.bestFitness, self.bird.fitness)
-        self.bird = Bird()
         self.pipes = [Pipe(800), Pipe(1050), Pipe(1300), Pipe(1550)]
-        print(self.bestFitness)
 
 
 def main():
