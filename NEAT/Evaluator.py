@@ -1,6 +1,7 @@
-from NEATt.Genome import *
-from NEATt.Species import *
-from NEATt.GenomeFitnessPair import *
+from NEAT.Genome import *
+from NEAT.Species import *
+from NEAT.GenomeFitnessPair import *
+from Bird import *
 
 
 def getRandomGenome(species):
@@ -17,10 +18,6 @@ def getRandomGenome(species):
             return gf.genome
 
 
-def evaluateGenome():
-    return 0
-
-
 class Evaluator:
     def __init__(self, populationSize, starter, nodeInnovation, connectionInnovation):
         self.nodeInnovation = nodeInnovation
@@ -32,6 +29,7 @@ class Evaluator:
         self.bestGenome = None
 
         self.population = []
+        self.birds = [Bird() for _ in range(populationSize)]
         self.species = []
 
         for i in range(populationSize):
@@ -70,7 +68,7 @@ class Evaluator:
 
         for g in self.population:
             s = self.speciesMap[g]
-            fitness = evaluateGenome() / len(s.population)
+            fitness = self.evaluateGenome(self.population.index(g)) / len(s.population)
             newPair = GenomeFitnessPair(g, fitness)
 
             s.addFitness(fitness)
@@ -132,6 +130,9 @@ class Evaluator:
                 self.nextGeneration.append(child)
 
         self.population = self.nextGeneration
+
+    def evaluateGenome(self, index):
+        return self.birds[index].fitness
 
     def getRandomSpecies(self):
         totalFitness = 0

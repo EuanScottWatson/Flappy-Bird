@@ -16,18 +16,19 @@ class Bird:
         self.sees = []
 
     def jump(self):
-        self.velocity[1] = max(min(25, self.velocity[1] - 16), -15)
+        if not self.dead:
+            self.velocity[1] = max(min(25, self.velocity[1] - 16), -15)
 
     def update(self):
         if not self.dead:
             self.velocity[1] = max(min(25, self.velocity[1] + 1), -15)
             self.pos += self.velocity
             self.fitness += 0.25
-        else:
-            self.pos += self.velocity
-            if self.pos[1] >= 900 - self.radius:
-                self.died = True
-            self.velocity[1] = max(min(30, self.velocity[1] + 8), -40)
+        # else:
+        #     self.pos += self.velocity
+        #     if self.pos[1] >= 900 - self.radius:
+        #         self.died = True
+        #     self.velocity[1] = max(min(30, self.velocity[1] + 8), -40)
 
     def update_sees(self, leftMost):
         self.sees = [self.velocity[1], leftMost.point[0] - self.pos[0], leftMost.point[1] - self.pos[1]]
@@ -71,8 +72,8 @@ class Bird:
         if not self.dead:
             self.checkPipePass(pipes)
 
-        if self.dead:
-            self.velocity = np.array([0, -40])
+        # if self.dead:
+        #     self.velocity = np.array([0, -40])
 
     def makeDecision(self):
         pass

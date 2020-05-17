@@ -1,8 +1,8 @@
 import random
-from NEATt.CONFIG import *
-from NEATt.NodeType import *
-from NEATt.ConnectionGenome import *
-from NEATt.NodeGenome import *
+from NEAT.CONFIG import *
+from NEAT.NodeType import *
+from NEAT.ConnectionGenome import *
+from NEAT.NodeGenome import *
 
 
 def crossover(parent1, parent2):
@@ -107,7 +107,7 @@ class Genome:
         self.nodes[node.id] = node
 
     def addConnection(self, connection):
-        self.connections[connection.id] = connection
+        self.connections[connection.innovationNo] = connection
 
     def mutation(self):
         for connection in self.connections.values():

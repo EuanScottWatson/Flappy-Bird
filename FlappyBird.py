@@ -2,7 +2,12 @@ import os
 from pygame.locals import *
 from Bird import *
 from Pipe import *
-from NEATt import *
+from NEAT.Genome import *
+from NEAT.InnovationNumber import *
+from NEAT.Evaluator import *
+from NEAT.NodeGenome import *
+from NEAT.NodeType import *
+from NEAT.ConnectionGenome import *
 
 
 class Game:
@@ -40,10 +45,11 @@ class Game:
         for pipe in self.pipes:
             pygame.draw.rect(screen, (255, 255, 255), pipe.pipeTop, 0)
             pygame.draw.rect(screen, (255, 255, 255), pipe.pipeBottom, 0)
-        if not self.bird.dead:
-            pygame.draw.circle(screen, (255, 255, 255), self.bird.pos, self.bird.radius, 1)
-        else:
-            pygame.draw.circle(screen, (255, 0, 0), self.bird.pos, self.bird.radius, 1)
+        for bird in self.evaluator.birds:
+            if not bird.dead:
+                pygame.draw.circle(screen, (255, 255, 255), bird.pos, bird.radius, 1)
+            else:
+                pygame.draw.circle(screen, (255, 0, 0), bird.pos, bird.radius, 1)
 
     def events(self):
         for event in pygame.event.get():
@@ -73,18 +79,22 @@ class Game:
         return leftMost
 
     def run_logic(self):
-        self.bird.update()
-        self.bird.update_sees(self.getLeftmostPipe())
+        for pipe in self.pipes:
+            pipe.update()
+        for bird in self.evaluator.birds:
+            bird.update()
+            bird.update_sees(self.getLeftmostPipe())
+            bird.checkCollision(self.pipes)
 
-        if not self.bird.dead:
-            for pipe in self.pipes:
-                pipe.update()
-            self.bird.checkCollision(self.pipes)
+            if random.random() < 0.1:
+                bird.jump()
 
-        if self.bird.died:
-            self.reset()
+        # Check if they're all dead
 
-        self.getLeftmostPipe()
+        # if self.bird.died:
+        #     self.reset()
+
+        # self.getLeftmostPipe()
 
     def reset(self):
         self.bestFitness = max(self.bestFitness, self.bird.fitness)
