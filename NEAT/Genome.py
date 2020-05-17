@@ -13,7 +13,7 @@ def crossover(parent1, parent2):
 
     for p1Connection in parent1.connections.values():
         if p1Connection.innovationNo in parent2.connections.keys():
-            childConnection = p1Connection.copy if bool(random.getrandbits(1)) else parent2.connections[
+            childConnection = p1Connection.copy() if bool(random.getrandbits(1)) else parent2.connections[
                 p1Connection.innovationNo]
             child.addConnection(childConnection)
         else:
@@ -41,19 +41,21 @@ def getAverageWeightDifference(g1, g2):
 
 
 def getExcessDisjointConnections(g1, g2, count, i, b1, b2):
-    if g1.connections[i] is None and b1 and g2.connections[i] is not None:
-        count += 1
-    elif g2.connections[i] is None and b2 and g1.connections[i] is not None:
-        count += 1
+    if (i in g1.connections.keys()) and (i in g2.connections.keys()):
+        if g1.connections[i] is None and b1 and g2.connections[i] is not None:
+            count += 1
+        elif g2.connections[i] is None and b2 and g1.connections[i] is not None:
+            count += 1
 
     return count
 
 
 def getDisjointExcessNodes(g1, g2, count, i, b1, b2):
-    if g1.nodes[i] is None and b1 and g2.nodes[i] is not None:
-        count += 1
-    elif g2.nodes[i] is None and b2 and g1.nodes[i] is not None:
-        count += 1
+    if (i in g1.nodes.keys()) and (i in g2.nodes.keys()):
+        if g1.nodes[i] is None and b1 and g2.nodes[i] is not None:
+            count += 1
+        elif g2.nodes[i] is None and b2 and g1.nodes[i] is not None:
+            count += 1
 
     return count
 
@@ -69,9 +71,9 @@ def countExcessDisjoint(genome1, genome2):
     highestInnovation = max(nodeOneKeys[-1], nodeTwoKeys[-1])
 
     for i in range(0, highestInnovation + 1):
-        excessGenes = getDisjointExcessNodes(genome1, genome2, excessGenes, i, nodeOneKeys[1] < i,
+        excessGenes = getDisjointExcessNodes(genome1, genome2, excessGenes, i, nodeOneKeys[-1] < i,
                                              nodeTwoKeys[-1] < i)
-        disjointGenes = getDisjointExcessNodes(genome1, genome2, disjointGenes, i, nodeOneKeys[1] > i,
+        disjointGenes = getDisjointExcessNodes(genome1, genome2, disjointGenes, i, nodeOneKeys[-1] > i,
                                                nodeTwoKeys[-1] > i)
 
     connectionOneKeys = list(genome1.connections.keys())
@@ -118,14 +120,14 @@ class Genome:
     def mutation(self):
         for connection in self.connections.values():
             if random.random() < self.config.MUTATION_THRESHOLD:
-                connection.setWeight(connection.weight * (random.random * 4 - 2))
+                connection.setWeight(connection.weight * (random.random() * 4 - 2))
             else:
-                connection.setWeight(random.random * 4 - 2)
+                connection.setWeight(random.random() * 4 - 2)
 
     def newConnectionMutation(self, connectionInnovation):
         keys = self.nodes.keys()
-        node1 = self.nodes.get(random.choice(keys))
-        node2 = self.nodes.get(random.choice(keys))
+        node1 = self.nodes.get(random.choice(list(keys)))
+        node2 = self.nodes.get(random.choice(list(keys)))
 
         weight = random.random() * 4 - 2
 
@@ -148,7 +150,7 @@ class Genome:
 
     def newNodeMutation(self, connectionInnovation, nodeInnovation):
         keys = self.connections.keys()
-        connection = self.connections[random.choice(keys)]
+        connection = self.connections[random.choice(list(keys))]
         connection.disable()
 
         node1 = self.nodes[connection.inputNode]

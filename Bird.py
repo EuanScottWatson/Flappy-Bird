@@ -6,7 +6,7 @@ class Bird:
     def __init__(self):
         self.pos = np.array([50, 450])
         self.velocity = np.array([0, 0])
-        self.radius = 30
+        self.radius = 20
         self.fitness = 0
 
         self.dead = False
@@ -31,7 +31,7 @@ class Bird:
         #     self.velocity[1] = max(min(30, self.velocity[1] + 8), -40)
 
     def update_sees(self, leftMost):
-        self.sees = [self.velocity[1], leftMost.point[0] - self.pos[0], leftMost.point[1] - self.pos[1]]
+        self.sees = [self.velocity[1], leftMost.point[0] - self.pos[0], leftMost.point[1] - self.pos[1] + 75]
 
     def checkPipePass(self, pipes):
         for pipe in pipes:

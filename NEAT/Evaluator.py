@@ -120,12 +120,12 @@ class Evaluator:
                 else:
                     child = crossover(p2, p1)
 
-                if random.random < self.config.MUTATION_THRESHOLD:
+                if random.random() < self.config.MUTATION_THRESHOLD:
                     child.mutation()
-                if random.random < self.config.ADD_CONNECTION_MUTATION:
-                    child.newConnectionMutation()
-                if random.random < self.config.ADD_NODE_THRESHOLD:
-                    child.newNodeMutation()
+                if random.random() < self.config.ADD_CONNECTION_MUTATION:
+                    child.newConnectionMutation(self.connectionInnovation)
+                if random.random() < self.config.ADD_NODE_THRESHOLD:
+                    child.newNodeMutation(self.connectionInnovation, self.nodeInnovation)
 
                 self.nextGeneration.append(child)
 

@@ -13,7 +13,7 @@ from NEAT.ConnectionGenome import *
 class Game:
     def __init__(self):
         self.bird = Bird()
-        self.pipes = [Pipe(800), Pipe(1050), Pipe(1300), Pipe(1550)]
+        self.pipes = [Pipe(800), Pipe(1200), Pipe(1600)]
         self.bestFitness = 0
 
         self.genome = Genome()
@@ -35,11 +35,11 @@ class Game:
         self.genome.addNode(n4)
 
         self.genome.addConnection(
-            ConnectionGenome(n1, n4, random.random() * 4 - 2, True, self.connectionInnovationNo.getInnovationNo()))
+            ConnectionGenome(n1.id, n4.id, random.random() * 4 - 2, True, self.connectionInnovationNo.getInnovationNo()))
         self.genome.addConnection(
-            ConnectionGenome(n2, n4, random.random() * 4 - 2, True, self.connectionInnovationNo.getInnovationNo()))
+            ConnectionGenome(n2.id, n4.id, random.random() * 4 - 2, True, self.connectionInnovationNo.getInnovationNo()))
         self.genome.addConnection(
-            ConnectionGenome(n3, n4, random.random() * 4 - 2, True, self.connectionInnovationNo.getInnovationNo()))
+            ConnectionGenome(n3.id, n4.id, random.random() * 4 - 2, True, self.connectionInnovationNo.getInnovationNo()))
 
     def display(self, screen):
         for pipe in self.pipes:
@@ -88,7 +88,7 @@ class Game:
             bird.checkCollision(self.pipes)
 
             neuralnetwork = NeuralNetwork(self.evaluator.population[i])
-            if neuralnetwork.feedForward(bird.sees)[0] > 0.5:
+            if neuralnetwork.feedForward(bird.sees)[0] > 0.75:
                 bird.jump()
 
         # Check if they're all dead
@@ -101,7 +101,7 @@ class Game:
             self.reset()
 
     def reset(self):
-        self.pipes = [Pipe(800), Pipe(1050), Pipe(1300), Pipe(1550)]
+        self.pipes = [Pipe(800), Pipe(1200), Pipe(1600)]
 
 
 def main():
