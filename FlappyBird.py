@@ -35,11 +35,14 @@ class Game:
         self.genome.addNode(n4)
 
         self.genome.addConnection(
-            ConnectionGenome(n1.id, n4.id, random.random() * 4 - 2, True, self.connectionInnovationNo.getInnovationNo()))
+            ConnectionGenome(n1.id, n4.id, random.random() * 4 - 2, True,
+                             self.connectionInnovationNo.getInnovationNo()))
         self.genome.addConnection(
-            ConnectionGenome(n2.id, n4.id, random.random() * 4 - 2, True, self.connectionInnovationNo.getInnovationNo()))
+            ConnectionGenome(n2.id, n4.id, random.random() * 4 - 2, True,
+                             self.connectionInnovationNo.getInnovationNo()))
         self.genome.addConnection(
-            ConnectionGenome(n3.id, n4.id, random.random() * 4 - 2, True, self.connectionInnovationNo.getInnovationNo()))
+            ConnectionGenome(n3.id, n4.id, random.random() * 4 - 2, True,
+                             self.connectionInnovationNo.getInnovationNo()))
 
     def display(self, screen):
         for pipe in self.pipes:
@@ -74,7 +77,7 @@ class Game:
         leftMost = min(pipeDict.items(), key=lambda x: x[0])[1]
 
         if leftMost.passedBird:
-            leftMost = self.pipes[(self.pipes.index(leftMost) + 1) % 4]
+            leftMost = self.pipes[(self.pipes.index(leftMost) + 1) % 3]
 
         return leftMost
 

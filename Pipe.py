@@ -6,8 +6,8 @@ class Pipe:
     def __init__(self, x):
         self.bottom = random.randint(150, 700)
         self.point = np.array([x, self.bottom])
-        self.pipeTop = pygame.Rect(x, 0, 75, self.bottom)
-        self.pipeBottom = pygame.Rect(x, self.bottom + 150, 75, 900)
+        self.pipeTop = pygame.Rect(x, 0, 50, self.bottom)
+        self.pipeBottom = pygame.Rect(x, self.bottom + 150, 50, 900)
 
         self.passedBird = False
 

@@ -33,7 +33,7 @@ def getAverageWeightDifference(g1, g2):
     highestInnovation = max(connectionOneKeys[-1], connectionTwoKeys[-1])
 
     for i in range(0, highestInnovation + 1):
-        if g1.connections[i] is not None and g2.connections[i] is not None:
+        if i in g1.connections.keys() and i in g2.connections.keys():
             matchingGenes += 1
             weightDifference += abs(g1.connections[i].weight - g2.connections[i].weight)
 
@@ -94,7 +94,6 @@ def countExcessDisjoint(genome1, genome2):
 def compatibilityDistance(genome1, genome2, c1, c2, c3):
     excessDisjoint = countExcessDisjoint(genome1, genome2)
     avWeightDifference = getAverageWeightDifference(genome1, genome2)
-
     return c1 * excessDisjoint[0] + c2 * excessDisjoint[1] + c3 * avWeightDifference
 
 

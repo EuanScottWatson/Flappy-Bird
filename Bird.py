@@ -17,7 +17,7 @@ class Bird:
 
     def jump(self):
         if not self.dead:
-            self.velocity[1] = max(min(25, self.velocity[1] - 16), -15)
+            self.velocity[1] = max(min(25, self.velocity[1] - 16), -10)
 
     def update(self):
         if not self.dead:
@@ -31,7 +31,7 @@ class Bird:
         #     self.velocity[1] = max(min(30, self.velocity[1] + 8), -40)
 
     def update_sees(self, leftMost):
-        self.sees = [self.velocity[1], leftMost.point[0] - self.pos[0], leftMost.point[1] - self.pos[1] + 75]
+        self.sees = [self.velocity[1], leftMost.point[0] - self.pos[0], leftMost.point[1] - self.pos[1] + 85]
 
     def checkPipePass(self, pipes):
         for pipe in pipes:
